@@ -2,8 +2,8 @@ package probes.repo;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import telran.probes.dto.SensorRange;
+import probes.model.SensorRangeDoc;
 
-public interface RangeRepo extends MongoRepository<SensorRange, Long>{
+public interface RangeRepo extends MongoRepository<SensorRangeDoc, Long>{
 
 }

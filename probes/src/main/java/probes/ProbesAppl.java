@@ -9,25 +9,39 @@ import org.springframework.context.annotation.Bean;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import probes.configuration.ProbesConfiguration;
 import probes.service.ProbesService;
 import telran.probes.dto.ProbeData;
 @SpringBootApplication
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class ProbesAppl {
+	private static final long TIMEOUT = 10000;
 	final ProbesService probesService;
-	private static final long TIMEOUT = 1000;
+	final ProbesConfiguration probesConfiguration;
 
 	public static void main(String[] args) throws InterruptedException {
 		ConfigurableApplicationContext ctx = SpringApplication.run(ProbesAppl.class, args);
 		Thread.sleep(TIMEOUT);
 		ctx.close();
+
 	}
+
 	@Bean
 	Supplier<ProbeData> probesSupplier() {
-	return this::probeGeneration;
+		return this::probeGeneration;
 	}
+
 	ProbeData probeGeneration() {
-	return probesService.getProbeData();
+		return getProbeData();
+
 	}
+
+	private ProbeData getProbeData() {
+		String bindingName = "probesSupplier-out-0"; //see Bean probesSupplier in this file
+		 ProbeData probeData = probesService.getRandomProbeData();
+		 log.debug("probe data: {} has been sent to {}", probeData, bindingName);
+		 return probeData;
+	}
+
 }
